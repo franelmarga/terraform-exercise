@@ -1,0 +1,9 @@
+**/*.terraform
+**/*.tfstate
+**/*.tfrename
+tmp
+manifests
+test
+**/builds
+
+

@@ -1,0 +1,1 @@
+../../shared/nat-gateways.tf
