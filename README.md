@@ -1,29 +1,53 @@
-# AWS Infrastructure Module
+# AWS Network Infrastructure Module
 
-This repository contains a Terraform module for setting up an AWS infrastructure according to the provided architectural diagram. The module is designed to create a highly available network structure with segregated public and private subnets across multiple Availability Zones, an Internet Gateway, NAT Gateways, and corresponding route tables and network ACLs.
-
-## Structure
-
-The module is divided into several files for clarity and ease of management, each representing a component of the AWS infrastructure:
-
-- `main.tf` - The primary entry point of the module that may call other files.
-- `variables.tf` - Definition of variables used throughout the module.
-- `outputs.tf` - Output attributes that can be used to display or pass to other modules.
-- `vpc.tf` - Configuration of the AWS Virtual Private Cloud (VPC).
-- `subnets.tf` - Definitions for public and private subnets in each Availability Zone.
-- `nat-gateways.tf` - NAT Gateways setup to allow private subnet instances to access the Internet.
-- `route-tables.tf` - Route tables for directing traffic within the VPC.
-- `igw.tf` - Internet Gateway setup for the VPC.
-- `network-acls.tf` - Network Access Control Lists for fine-grained control over network traffic.
-- `security-groups.tf` - Security group configurations.
+This module is designed to provision a fully functional AWS VPC network infrastructure with public and private subnets across multiple availability zones, an Internet Gateway, NAT Gateways, and associated routing and network ACLs.
 
 ## Usage
 
-To use this module in your Terraform environment, add a `module` block to your Terraform configuration file as shown below:
+To use this module in your Terraform environment, you will need to include something like the following in your `main.tf` file within your environment's directory (e.g., `development`):
 
-```
-module "aws_infrastructure" {
-  source = "path/to/this/module/directory"
+```hcl
+module "infra-network" {
+  source = "../../modules/infra-network" # or wherever the module is placed!
 
+  env                = var.env
+  region             = var.region
+  vpc_cidr           = var.vpc_cidr
+  availability_zones = var.availability_zones
+  public_subnets     = var.public_subnets
+  private_subnets    = var.private_subnets
+  create_nat_gateway = var.create_nat_gateway
+  repo_tags          = var.repo_tags
+  env_tags           = var.env_tags
 }
 ```
+
+## Repo structure
+
+The Terraform code is divided into environments, and each AWS resource is split into separate Terraform files to maintain granularity.
+
+````
+TERRAFORM-EXERCISE
+├── README.md
+├── environments
+│   ├── development
+│   │   ├── main.tf
+│   │   ├── terraform.tfstate
+│   │   ├── terraform.tfvars
+│   │   └── variables.tf -> ../../modules/infra-network/variables.tf
+│   └── production
+│       ├── main.tf
+│       ├── terraform.tfvars
+│       └── variables.tf -> ../../modules/infra-network/variables.tf
+└── modules
+    └── infra-network
+        ├── acls.tf
+        ├── common.tf
+        ├── igw.tf
+        ├── nat-gateways.tf
+        ├── output.tf
+        ├── route-tables.tf
+        ├── subnets.tf
+        ├── variables.tf
+        └── vpc.tf
+````
