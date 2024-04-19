@@ -4,9 +4,6 @@ env_tags = {
   Environment = "development"
 }
 
-env_vars = {
-}
-
 region = "us-west-2"
 
 public_subnets = {

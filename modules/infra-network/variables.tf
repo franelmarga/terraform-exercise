@@ -17,12 +17,6 @@ variable "env_tags" {
   description = "Map of tags for this environment"
 }
 
-variable "env_vars" {
-  type        = any
-  default     = {}
-  description = "Environment config vars"
-}
-
 variable "region" {
   description = "AWS region to deploy the resources"
   type        = string

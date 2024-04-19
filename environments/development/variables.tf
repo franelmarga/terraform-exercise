@@ -1,1 +1,1 @@
-../../shared/variables.tf
+../../modules/infra-network/variables.tf
