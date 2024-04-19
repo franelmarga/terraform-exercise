@@ -1,5 +1,5 @@
-# This would be an example of the use of the module in the development environment.
-# We can define the variables in the terraform.tfvars file and then use them in the main.tf file, for conserving the granularity of the configuration.
+
+# Example for the production environment
 
 module "infra-network" {
   source = "../../modules/infra-network"

@@ -1,3 +1,6 @@
+
+# creating subnets according to the terraform.tfvars 
+
 resource "aws_subnet" "public" {
   count                   = length(var.availability_zones)
   vpc_id                  = aws_vpc.main.id
