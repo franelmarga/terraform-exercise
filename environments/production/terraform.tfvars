@@ -1,7 +1,7 @@
 
 # Global variables
 
-env = "prod"
+env = "produ"
 
 env_tags = {
   Environment = "production"
