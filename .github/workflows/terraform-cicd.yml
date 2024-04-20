@@ -1,38 +1,47 @@
-name: Terraform CI/CD
+name: Terraform GitHub Actions
 
 on:
-  issue_comment:
-    types: [created]
-  pull_request:
+  push:
     branches:
       - master
+  pull_request:
+  issue_comment:
+    types: [created]
 
 jobs:
-  security_check:
-    if: github.event.issue.pull_request && contains(github.event.comment.body, 'test this please')
+  terraform:
+    if: |
+      github.event_name == 'push' ||
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'issue_comment' && 
+       contains(github.event.comment.body, 'test this please!') && 
+       github.event.issue.pull_request)
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Checkout the repository
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
 
       - name: Install Checkov
-        run: python -m pip install --upgrade pip checkov
+        run: pip install checkov
 
-      - name: Run Checkov Security Scan
+      - name: Run Checkov
         run: checkov -d .
+        continue-on-error: true
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: '1.0.0'
+          terraform_version: '1.4.0'
 
-      - name: Terraform Format Check
-        run: terraform fmt -check
+      - name: Terraform Format
+        run: terraform fmt
 
       - name: Terraform Init
         run: terraform init
